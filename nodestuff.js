@@ -164,6 +164,24 @@ async function runj() {
         count: 1
       }
     },
+    {
+      $group: {
+        _id: null,
+        moodCounts: {
+          $push: {
+            k: "$mood",
+            v: "$count"
+          }
+        }
+      }
+    },
+    {
+      $replaceRoot: {
+        newRoot: {
+          $arrayToObject: "$moodCounts"
+        }
+      }
+    }
   ]
   const result2 = await feelio.aggregate(aggregation).toArray();
   console.log(result2)
