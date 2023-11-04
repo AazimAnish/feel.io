@@ -17,6 +17,8 @@ const app = initializeApp(firebaseConfig);
 const db  = getDatabase()
 const dbRef = ref(getDatabase());
 
+
+
 function sendtopopup(){
     
 
@@ -84,6 +86,25 @@ function adddata(timestamp, prompt, mood, score){
         cluster:""
 	});
     sendtopopup()   
+    adddatatomongodb()
+}
+
+async function adddatatomongodb(timestamp, prompt, mood, score){
+  data = {
+    "timestamp":timestamp,
+    "prompt":prompt,
+    "mood":mood,
+    "score":score
+  }
+  const response = await fetch(
+		"https://localhost:3000/",
+		{
+			method: "GET",
+			body: JSON.stringify(data),
+		}
+	);
+	const result = await response.json();
+	return result;
 }
 
 chrome.runtime.onMessage.addListener(
