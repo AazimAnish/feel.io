@@ -77,6 +77,7 @@ function getdata(){
 
 
 
+
 function adddata(timestamp, prompt, mood, score){
     console.log(timestamp, prompt, mood, score)
 	set(ref(db, "data/"+timestamp), {
@@ -86,26 +87,11 @@ function adddata(timestamp, prompt, mood, score){
         cluster:""
 	});
     sendtopopup()   
-    adddatatomongodb()
+    console.log("677866786867")
+    adddatatomongodb().then(x=>console.log(x))
 }
 
-async function adddatatomongodb(timestamp, prompt, mood, score){
-  data = {
-    "timestamp":timestamp,
-    "prompt":prompt,
-    "mood":mood,
-    "score":score
-  }
-  const response = await fetch(
-		"https://localhost:3000/",
-		{
-			method: "GET",
-			body: JSON.stringify(data),
-		}
-	);
-	const result = await response.json();
-	return result;
-}
+
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {

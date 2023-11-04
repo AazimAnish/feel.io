@@ -3,10 +3,29 @@
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+async function adddatatomongodb(timestamp, prompt, mood, score){
+	let mydata = {
+		"timestamp":timestamp,
+		"prompt":prompt,
+		"mood":mood,
+		"score":score
+	  }
+	  mydata = JSON.stringify(mydata)
 
+	fetch('http://localhost:3000', {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+		  'Access-Control-Allow-Origin': '*',
+		},
+		body: mydata,
+	  })
+}
 
 async function sendtodb(timestamp, prompt, mood, score) {
 	console.log(timestamp, prompt, mood, score)
+	adddatatomongodb(timestamp, prompt, mood, score)
 	const response = await chrome.runtime.sendMessage({type:"forbackground", timestamp: timestamp, prompt:prompt, mood:mood, score:score});
 }
 
