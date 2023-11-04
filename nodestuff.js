@@ -19,6 +19,10 @@ app.post('/lasthours', (req, res) => {
   runk(req.body.hours).then(x=>{res.send(x)})
 });
 
+app.post('/normalmoods', (req, res) => {
+  runj().then(x=>{res.send(x)})
+});
+
 app.post('/journalentry', (req, res) => {
   runp(req.body).then(x=>{res.send(x)})
 });
@@ -83,6 +87,7 @@ async function runk(hours) {
   const feelio = database.collection("feelio");
   
   const aggregation = [
+    
     {
       $match: {
         timestamp: {
@@ -115,4 +120,53 @@ async function runk(hours) {
   return result2
 }
 
+
+async function runj() {
+  const uri = "mongodb+srv://mishal0404:mishal2003@mishal0404.35lsnon.mongodb.net/?retryWrites=true&w=majority";
+  
+  const client = new MongoClient(uri, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    }
+  });
+
+  await client.connect();
+  const database = client.db("feelio");
+  const feelio = database.collection("feelio");
+  
+  const aggregation = [
+    {
+      $match: {
+        timestamp: {
+          $gte: (Date.now() / 1000) - 3600 * 24 * 30  // Current time in seconds minus 3600 seconds (1 hour)
+        }
+      }
+    },
+    {
+      $match: {
+        mood: {
+          $in: ["joy", "anger", "neutral", "sadness"]
+        }
+      }
+    },
+    {
+      $group: {
+        _id: "$mood",
+        count: { $sum: 1 }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        mood: "$_id",
+        count: 1
+      }
+    },
+  ]
+  const result2 = await feelio.aggregate(aggregation).toArray();
+  console.log(result2)
+  return result2
+}
 
