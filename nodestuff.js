@@ -11,12 +11,16 @@ app.use(cors({origin: "*"}));
 
 app.post('/', (req, res) => {
   const requestData = req.body;
-  //run(requestData).then(x=>{res.send(x)})
-  runk().then(x=>{res.send(x)})
+  run(requestData).then(x=>{res.send(x)})
+  
 });
 
 app.post('/lasthours', (req, res) => {
   runk(req.body.hours).then(x=>{res.send(x)})
+});
+
+app.post('/journalentry', (req, res) => {
+  runk(req.body).then(x=>{res.send(x)})
 });
 
 // Start the Express server
@@ -42,6 +46,25 @@ async function run(requestData) {
     const result = await feelio.insertOne(requestData);
     console.log(`A document was inserted with the _id: ${result.insertedId}`);
     return requestData
+}
+
+async function runp(requestData) {
+  const uri = "mongodb+srv://mishal0404:mishal2003@mishal0404.35lsnon.mongodb.net/?retryWrites=true&w=majority";
+  
+  const client = new MongoClient(uri, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    }
+  });
+
+  await client.connect();
+  const database = client.db("feelio");
+  const feelio = database.collection("journal");
+  const result = await feelio.insertOne(requestData);
+  console.log(`A document was inserted with the _id: ${result.insertedId}`);
+  return requestData
 }
 
 async function runk(hours) {
