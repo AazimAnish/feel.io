@@ -20,7 +20,7 @@ app.post('/lasthours', (req, res) => {
 });
 
 app.post('/journalentry', (req, res) => {
-  runk(req.body).then(x=>{res.send(x)})
+  runp(req.body).then(x=>{res.send(x)})
 });
 
 // Start the Express server
