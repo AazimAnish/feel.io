@@ -1,23 +1,43 @@
 const { MongoClient, ServerApiVersion } =  require('mongodb');
-const uri = "mongodb+srv://mishal0404:mishal2003@mishal0404.35lsnon.mongodb.net/?retryWrites=true&w=majority";
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+const express = require('express')
+port = 3000
+app = express()
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+
+// Define a route to handle incoming JSON requests
+app.post('/', (req, res) => {
+  // Access the JSON data from the request body
+  const requestData = req.body;
+  run(requestData).then(x=>{res.send(x)})
 });
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
+
+// Start the Express server
+app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
+});
+
+
+async function run(requestData) {
+    const uri = "mongodb+srv://mishal0404:mishal2003@mishal0404.35lsnon.mongodb.net/?retryWrites=true&w=majority";
+    
+    const client = new MongoClient(uri, {
+      serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      }
+    });
+
     await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
+    const database = client.db("feelio");
+    const feelio = database.collection("feelio");
+
+    
+    const result = await feelio.insertOne(requestData);
+    console.log(`A document was inserted with the _id: ${result.insertedId}`);
+    return requestData
 }
-run().catch(console.dir);
+
+
