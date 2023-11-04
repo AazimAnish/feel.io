@@ -1,6 +1,8 @@
 import {initializeApp } from 'https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js'
 import { getDatabase, set, get, ref, child, push, onValue } from 'https://www.gstatic.com/firebasejs/10.3.0/firebase-database.js'
   
+ 
+url = "https://nodeformakeaton.onrender.com"
 
 const firebaseConfig = {
     apiKey: "AIzaSyBLOrV8K_-MYavFlHf7HiYwUHmUQSt2YzA",
