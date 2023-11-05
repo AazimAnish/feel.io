@@ -26,10 +26,6 @@ app.post('/normalmoods', (req, res) => {
   runj().then(x=>{res.send(x)})
 });
 
-app.post('/nthhour', (req, res) => {
-  runb(req.body.hour).then(x=>{res.send(x)})
-});
-
 app.post('/journalentry', (req, res) => {
   runp(req.body).then(x=>{res.send(x)})
 });
