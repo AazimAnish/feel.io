@@ -12,11 +12,14 @@ app.use(cors({origin: "*"}));
 app.post('/', (req, res) => {
   const requestData = req.body;
   run(requestData).then(x=>{res.send(x)})
-  
 });
 
 app.post('/lasthours', (req, res) => {
   runk(req.body.hours).then(x=>{res.send(x)})
+});
+
+app.post('/happy', (req, res) => {
+  runa(req.body.hours).then(x=>{res.send(x)})
 });
 
 app.post('/normalmoods', (req, res) => {
@@ -186,6 +189,44 @@ async function runj() {
   const result2 = await feelio.aggregate(aggregation).toArray();
   console.log(result2)
   return result2
+}
+
+
+async function runa(hour) {
+  const uri = "mongodb+srv://mishal0404:mishal2003@mishal0404.35lsnon.mongodb.net/?retryWrites=true&w=majority";
+  
+  const client = new MongoClient(uri, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    }
+  });
+
+  await client.connect();
+  const database = client.db("feelio");
+  const feelio = database.collection("feelio");
+  
+  const aggregation = [
+    {
+      $match: {
+        mood: "joy",
+        timestamp: {
+          $gte: Math.floor(Date.now() / 1000) - hour * 24 * 60 * 60 // 30 days in seconds
+        }
+      }
+    },
+    {
+      $group: {
+        _id: "$joy",
+        joyCount: { $sum: 1 }
+      }
+    }
+    
+  ]
+  const result2 = await feelio.aggregate(aggregation).toArray();
+  console.log(result2)
+  return JSON.stringify(result2)
 }
 
 
