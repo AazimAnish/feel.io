@@ -16,7 +16,7 @@ async function adddatatomongodb(timestamp, prompt, mood, score){
 	  }
 	  mydata = JSON.stringify(mydata)
 
-	fetch('http://localhost:3000', {
+	fetch(url, {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
