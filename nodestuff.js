@@ -23,6 +23,10 @@ app.post('/normalmoods', (req, res) => {
   runj().then(x=>{res.send(x)})
 });
 
+app.post('/nthhour', (req, res) => {
+  runb(req.body.hour).then(x=>{res.send(x)})
+});
+
 app.post('/journalentry', (req, res) => {
   runp(req.body).then(x=>{res.send(x)})
 });
@@ -139,15 +143,11 @@ async function runj() {
   const aggregation = [
     {
       $match: {
-        timestamp: {
-          $gte: (Date.now() / 1000) - 3600 * 24 * 30  // Current time in seconds minus 3600 seconds (1 hour)
-        }
-      }
-    },
-    {
-      $match: {
         mood: {
           $in: ["joy", "anger", "neutral", "sadness"]
+        },
+        timestamp: {
+          $gte: (Date.now() / 1000) - 3600 * 24 * 30  // Current time in seconds minus 3600 seconds (1 hour)
         }
       }
     },
@@ -187,4 +187,6 @@ async function runj() {
   console.log(result2)
   return result2
 }
+
+
 
