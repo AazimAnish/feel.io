@@ -17,7 +17,7 @@ async function adddatatomongodb(timestamp, prompt, mood, score){
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
-		  'Access-Control-Allow-Origin': '*',
+		   'Access-Control-Allow-Origin': '*',
 		},
 		body: mydata,
 	  })
