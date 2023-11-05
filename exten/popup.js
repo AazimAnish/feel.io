@@ -91,23 +91,29 @@ const activity_mapping = {
     "remorse": "Apologize sincerely and make amends for your actions.",
     "sadness": "Spend time in self-care, do something you enjoy, or seek comfort from a friend.",
     "surprise": "Embrace the moment, explore new opportunities, and be open to change.",
-    "neutral": "Reflect on your day and engage in activities that bring you peace."
+    "neutral": "Reflect on your day and engage in activities that bring you peace.",
+    "":"Take care of yourself and your loved ones."
 };
 
+let url = "https://nodeformakeaton.onrender.com" 
+
+const resp = await fetch(url+"/lasthours", {
+    method: 'POST',
+    headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      
+    },
+    body: JSON.stringify({hours:10}),
+  })
+const top3Categories = await resp.json();
+console.log(top3Categories)
 
 
-document.addEventListener("DOMContentLoaded", (event) => {
-    chrome.storage.local.get(["top3"]).then((result) => {
-        console.log(result.top3)
-        //document.getElementById("mood3").innerHTML = result.top3[2]["category"]
-        //document.getElementById("mood2").innerHTML = result.top3[1]["category"]
-        document.getElementById("recommendation2").innerHTML = activity_mapping[result.top3[0]["category"]]
-        document.getElementById("recommendation1").innerHTML = suggestion_mapping[result.top3[0]["category"]]
-        document.getElementById("mood1").innerHTML = result.top3[0]["category"]
-        document.getElementById("emoji1").innerHTML = emoji_mapping[result.top3[0]["category"]]
-        document.getElementById("emoji2").innerHTML = emoji_mapping[result.top3[1]["category"]]
-        document.getElementById("emoji3").innerHTML = emoji_mapping[result.top3[2]["category"]]
-        
-        
-      });
-  });
+        document.getElementById("recommendation2").innerHTML = activity_mapping[top3Categories[0]["mood"]]
+        document.getElementById("recommendation1").innerHTML = suggestion_mapping[top3Categories[0]["mood"]]
+        document.getElementById("mood1").innerHTML = top3Categories[0]["mood"]
+        document.getElementById("emoji1").innerHTML = emoji_mapping[top3Categories[0]["mood"]]
+        document.getElementById("emoji2").innerHTML = emoji_mapping[top3Categories[1]["mood"]]
+        document.getElementById("emoji3").innerHTML = emoji_mapping[top3Categories[2]["mood"]]
